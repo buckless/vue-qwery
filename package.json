@@ -22,6 +22,7 @@
     }
   },
   "devDependencies": {
+    "@vue/composition-api": "^0.5.0",
     "husky": "^4.2.5",
     "tsdx": "^0.13.2",
     "tslib": "^2.0.0",
@@ -29,7 +30,6 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "@vue/composition-api": "^0.5.0",
     "axios": "^0.19.2"
   }
 }
