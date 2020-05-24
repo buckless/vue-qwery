@@ -1,14 +1,17 @@
 import { ref, onMounted } from "@vue/composition-api";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import { createCache } from "./cache";
 
 export type QueryStatus = "loading" | "error" | "done";
+
+const cache = createCache();
 
 export function useQuery<TBody>(
   url: string,
   headers: Record<string, string> = {}
 ) {
   const status = ref<QueryStatus>("loading");
-  const data = ref<AxiosResponse<TBody> | undefined>(undefined);
+  const data = ref<AxiosResponse<TBody> | undefined>(cache.get(url));
   const error = ref<AxiosError<TBody> | undefined>(undefined);
 
   async function makeQuery() {
@@ -19,6 +22,7 @@ export function useQuery<TBody>(
         headers
       });
 
+      cache.set(url, data.value);
       data.value = res;
       status.value = "done";
     } catch (err) {
