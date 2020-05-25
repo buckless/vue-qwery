@@ -23,11 +23,6 @@ jobs:
         env:
           CI: true
 
-      - name: Build
-        run: yarn build
-        env:
-          CI: true
-
       - name: Create Release on Github
         id: create_release
         uses: actions/create-release@v1
@@ -40,7 +35,8 @@ jobs:
           prerelease: false
 
       - name: Publish
-        run: yarn publish
+        run: yarn publish --access public
         env:
+          CI: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
