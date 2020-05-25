@@ -1,6 +1,11 @@
 {
   "name": "@buckless/vue-qwery",
-  "author": "Gabriel Juchault",
+  "author": "Buckless <contact@buckless.com> https://buckless.com",
+  "contributors": [
+    "Gabriel Juchault <gabriel@buckless.com>",
+    "Axel Mousset <axel@buckless.com>",
+    "Lucas Soulier <lucas@buckless.com>"
+  ],
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
