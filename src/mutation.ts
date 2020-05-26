@@ -14,9 +14,9 @@ type UseMutationResult<TBody, TResponse, TError> = [
 
 export function useMutation<
   TBody,
-  TResponse extends object,
+  TRawResponse extends object,
   TError = any,
-  TRawResponse extends object = any
+  TResponse extends object = any
 >({
   url,
   method = "POST",
@@ -24,9 +24,9 @@ export function useMutation<
   headers = {}
 }: {
   url: string;
-  method: Method;
-  reshaper: (data: TRawResponse) => TResponse;
-  headers: Record<string, string>;
+  method?: Method;
+  reshaper?: (data: TRawResponse) => TResponse;
+  headers?: Record<string, string>;
 }): UseMutationResult<TBody, TResponse, TError> {
   const status = ref<MutationStatus>("idle");
   const data = ref<AxiosResponse<TResponse> | undefined>(undefined);

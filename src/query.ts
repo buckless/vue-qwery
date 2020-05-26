@@ -7,17 +7,17 @@ export type QueryStatus = "loading" | "error" | "done";
 const cache = createCache();
 
 export function useQuery<
-  TResponse extends object,
+  TRawResponse extends object,
   TError = any,
-  TRawResponse extends object = any
+  TResponse extends object = any
 >({
   url,
   reshaper = data => (data as unknown) as TResponse,
   headers = {}
 }: {
   url: string;
-  reshaper: (data: TRawResponse) => TResponse;
-  headers: Record<string, string>;
+  reshaper?: (data: TRawResponse) => TResponse;
+  headers?: Record<string, string>;
 }) {
   const status = ref<QueryStatus>("loading");
   const data = ref<AxiosResponse<TResponse> | undefined>(cache.get(url));
