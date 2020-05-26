@@ -6,13 +6,22 @@ export type QueryStatus = "loading" | "error" | "done";
 
 const cache = createCache();
 
-export function useQuery<TBody>(
-  url: string,
-  headers: Record<string, string> = {}
-) {
+export function useQuery<
+  TResponse extends object,
+  TError = any,
+  TRawResponse extends object = any
+>({
+  url,
+  reshaper = data => (data as unknown) as TResponse,
+  headers = {}
+}: {
+  url: string;
+  reshaper: (data: TRawResponse) => TResponse;
+  headers: Record<string, string>;
+}) {
   const status = ref<QueryStatus>("loading");
-  const data = ref<AxiosResponse<TBody> | undefined>(cache.get(url));
-  const error = ref<AxiosError<TBody> | undefined>(undefined);
+  const data = ref<AxiosResponse<TResponse> | undefined>(cache.get(url));
+  const error = ref<AxiosError<TError> | undefined>(undefined);
 
   async function makeQuery() {
     status.value = "loading";
@@ -23,7 +32,10 @@ export function useQuery<TBody>(
       });
 
       cache.set(url, data.value);
-      data.value = res;
+      data.value = {
+        ...res,
+        data: reshaper(res.data)
+      };
       status.value = "done";
     } catch (err) {
       status.value = "error";
