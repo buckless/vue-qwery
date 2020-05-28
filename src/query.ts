@@ -7,16 +7,16 @@ export type QueryStatus = "loading" | "error" | "done";
 const cache = createCache();
 
 export function useQuery<
-  TRawResponse extends object,
-  TError = any,
-  TResponse extends object = any
+  TRawResponse = object,
+  TError = object,
+  TResponse = TRawResponse
 >({
   url,
   reshaper = data => (data as unknown) as TResponse,
   headers = {}
 }: {
   url: string;
-  reshaper?: (data: TRawResponse) => TResponse;
+  reshaper: (data: TRawResponse) => TResponse;
   headers?: Record<string, string>;
 }) {
   const status = ref<QueryStatus>("loading");

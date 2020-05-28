@@ -14,9 +14,9 @@ type UseMutationResult<TBody, TResponse, TError> = [
 
 export function useMutation<
   TBody,
-  TRawResponse extends object,
-  TError = any,
-  TResponse extends object = any
+  TRawResponse = object,
+  TError = object,
+  TResponse = TRawResponse
 >({
   url,
   method = "POST",
@@ -25,7 +25,7 @@ export function useMutation<
 }: {
   url: string;
   method?: Method;
-  reshaper?: (data: TRawResponse) => TResponse;
+  reshaper: (data: TRawResponse) => TResponse;
   headers?: Record<string, string>;
 }): UseMutationResult<TBody, TResponse, TError> {
   const status = ref<MutationStatus>("idle");
