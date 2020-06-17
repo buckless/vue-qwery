@@ -6,7 +6,7 @@
     "Axel Mousset <axel@buckless.com>",
     "Lucas Soulier <lucas@buckless.com>"
   ],
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/vue-qwery.esm.js",
