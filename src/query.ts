@@ -31,12 +31,13 @@ export function useQuery<
         headers
       });
 
-      cache.set(url, data.value);
       data.value = {
         ...res,
         data: reshaper(res.data)
       };
       status.value = "done";
+
+      cache.set(url, data.value);
     } catch (err) {
       status.value = "error";
       error.value = err;
