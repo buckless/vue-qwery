@@ -24,7 +24,7 @@ export function useQuery<
   const data = ref<AxiosResponse<TResponse> | undefined>(cache.get(url.value));
   const error = ref<AxiosError<TError> | undefined>(undefined);
 
-  async function makeQuery(onInvalidate: (cb: () => void) => void) {
+  async function makeQuery(onInvalidate?: (cb: () => void) => void) {
     status.value = "loading";
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
@@ -47,6 +47,10 @@ export function useQuery<
     } catch (err) {
       status.value = "error";
       error.value = err;
+    }
+
+    if (!onInvalidate) {
+      return;
     }
 
     onInvalidate(() => {
