@@ -1,4 +1,4 @@
-import { ref, Ref } from "@vue/composition-api";
+import { ref, Ref, isRef } from "@vue/composition-api";
 import axios, { AxiosResponse, AxiosError, Method } from "axios";
 
 export type MutationStatus = "idle" | "loading" | "error" | "done";
@@ -18,35 +18,39 @@ export function useMutation<
   TError = object,
   TResponse = TRawResponse
 >({
-  url,
+  url: inputUrl,
   method = "POST",
   reshaper = data => (data as unknown) as TResponse,
   headers = {}
 }: {
-  url: string;
+  url: string | Ref<string>;
   method?: Method;
   reshaper: (data: TRawResponse) => TResponse;
   headers?: Record<string, string>;
 }): UseMutationResult<TBody, TResponse, TError> {
+  const url = isRef(inputUrl) ? inputUrl : ref(inputUrl);
   const status = ref<MutationStatus>("idle");
   const data = ref<AxiosResponse<TResponse> | undefined>(undefined);
   const error = ref<AxiosError<TError> | undefined>(undefined);
 
   async function makeQuery(body: TBody) {
     status.value = "loading";
+
     let res: AxiosResponse<TRawResponse>;
 
     try {
-      res = await axios(url, {
+      res = await axios(url.value, {
         data: body,
         method,
         headers
       });
 
-      data.value = {
+      const outputData = {
         ...res,
         data: reshaper(res.data)
       };
+
+      data.value = outputData;
       status.value = "done";
     } catch (err) {
       status.value = "error";
